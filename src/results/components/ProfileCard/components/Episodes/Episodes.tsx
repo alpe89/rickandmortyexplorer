@@ -1,6 +1,7 @@
 import { FC } from "react";
 import { Flex, SimpleGrid, Text } from "@chakra-ui/react";
 import { Profile } from "../../../../../types";
+import { normalizeEmptyString } from "../../../../../helpers";
 
 type Props = {
     episodes: Profile["episodeInfo"];
@@ -21,7 +22,7 @@ export const Episodes: FC<Props> = ({ episodes }) => {
                     alignItems="center"
                 >
                     <Text fontSize="smaller" textAlign="center">
-                        {episode.episode}: {episode.name}
+                        {normalizeEmptyString(episode.episode)}: {episode.name}
                     </Text>
                 </Flex>
             ))}

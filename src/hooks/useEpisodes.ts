@@ -2,6 +2,7 @@ import { useCallback, useState } from "react";
 import { getEpisode } from "rickmortyapi";
 import { getIdFromResourceUrl } from "../helpers";
 import { useDataSource } from "../data";
+import { EpisodeMap } from "../types";
 
 export const useEpisodes = () => {
     const { episodes, setEpisodes } = useDataSource();
@@ -16,13 +17,15 @@ export const useEpisodes = () => {
                     setIsFetchingEpisodes(false);
 
                     if (response.data) {
+                        const episodesMap: EpisodeMap = {};
+
                         response.data.forEach(episode => {
-                            setEpisodes(draft => {
-                                if (!draft[episode.id]) {
-                                    draft[episode.id] = { name: episode.name, episode: episode.episode };
-                                }
-                            });
+                            if (!episodesMap[episode.id]) {
+                                episodesMap[episode.id] = { name: episode.name, episode: episode.episode };
+                            }
                         });
+
+                        setEpisodes(episodesMap);
                     }
                 } catch (e) {
                     setIsFetchingEpisodes(false);

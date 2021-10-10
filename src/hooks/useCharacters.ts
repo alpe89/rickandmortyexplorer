@@ -2,7 +2,7 @@ import { useCallback, useEffect, useState } from "react";
 import { getCharacters } from "rickmortyapi";
 import { useDataSource } from "../data";
 import { addToMap, getIdFromResourceUrl } from "../helpers";
-import { Character, Info } from "../types";
+import { Character, CharacterMap, Info } from "../types";
 
 export const useCharacters = () => {
     const { characters, setCharacters } = useDataSource();
@@ -11,34 +11,40 @@ export const useCharacters = () => {
     const [locationsToFetch, setLocationsToFetch] = useState<number[]>([]);
     const [episodesToFetch, setEpisodesToFetch] = useState<number[]>([]);
 
-    const fetchCharacters = useCallback(async () => {
-        setIsFetchingCharacters(true);
+    const fetchCharacters = useCallback(
+        async (page = 1) => {
+            setIsFetchingCharacters(true);
+            try {
+                const response = await getCharacters({ page });
 
-        getCharacters()
-            .then(response => {
                 if (response.data.info) {
                     setInfo(response.data.info);
                 }
 
                 if (response.data.results) {
-                    setCharacters(draft => {
-                        response.data.results!.forEach(character => {
-                            draft[character.id] = character;
-                        });
+                    const charactersMap: CharacterMap = {};
+
+                    response.data.results.forEach(character => {
+                        charactersMap[character.id] = character;
                     });
+
+                    setCharacters(charactersMap);
                 }
-            })
-            .finally(() => {
                 setIsFetchingCharacters(false);
-            });
-    }, [setCharacters]);
+            } catch (e: any) {
+                setIsFetchingCharacters(false);
+                throw new Error(e.message);
+            }
+        },
+        [setCharacters]
+    );
 
     const getCharacterProfileData = useCallback(
         (character: Character) => (({ created, ...rest }) => rest)(character),
         []
     );
 
-    useEffect(() => {
+    const setResourcesToFetch = useCallback(() => {
         const locationsMap: Record<string, number> = {};
         const episodesMap: Record<string, number> = {};
 
@@ -64,6 +70,11 @@ export const useCharacters = () => {
         setLocationsToFetch(Object.keys(locationsMap).map(Number));
         setEpisodesToFetch(Object.keys(episodesMap).map(Number));
     }, [characters]);
+
+    useEffect(() => {
+        setResourcesToFetch();
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [JSON.stringify(characters)]);
 
     return {
         characters,

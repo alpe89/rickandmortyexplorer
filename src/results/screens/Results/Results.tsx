@@ -1,7 +1,8 @@
-import { useEffect, useMemo, useState } from "react";
+/* eslint-disable react-hooks/exhaustive-deps */
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { Text, Flex, Grid } from "@chakra-ui/react";
 import { ProfileCard } from "../../components";
-import { Spinner } from "../../../components";
+import { Spinner, Pagination } from "../../../components";
 import { useCharacters, useLocations, useEpisodes } from "../../../hooks";
 import { Profile } from "../../../types";
 
@@ -13,10 +14,12 @@ export const Results = () => {
         locationsToFetch,
         episodesToFetch,
         isFetchingCharacters,
+        info,
     } = useCharacters();
     const { locations, fetchLocations, createLocationInfo, isFetchingLocations } = useLocations();
     const { episodes, fetchEpisodes, createEpisodeInfo, isFetchingEpisodes } = useEpisodes();
     const [profiles, setProfiles] = useState<Profile[]>([]);
+    const [page, setPage] = useState<number>(1);
 
     const isFetchingResources = useMemo(
         () => isFetchingCharacters || isFetchingEpisodes || isFetchingLocations,
@@ -24,20 +27,22 @@ export const Results = () => {
     );
 
     useEffect(() => {
-        fetchCharacters();
-    }, [fetchCharacters]);
+        fetchCharacters(page);
+    }, [fetchCharacters, page]);
 
     useEffect(() => {
         fetchLocations(locationsToFetch);
-    }, [fetchLocations, locationsToFetch]);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [fetchLocations, JSON.stringify(locationsToFetch)]);
 
     useEffect(() => {
         fetchEpisodes(episodesToFetch);
-    }, [fetchEpisodes, episodesToFetch]);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [fetchEpisodes, JSON.stringify(episodesToFetch)]);
 
-    useEffect(() => {
+    const createProfiles = useCallback(() => {
         if (!isFetchingResources && Object.keys(episodes).length > 0 && Object.keys(locations).length > 0) {
-            const profileList = Object.keys(characters).map(characterKey => {
+            return Object.keys(characters).map(characterKey => {
                 const characterData = getCharacterProfileData(characters[characterKey]);
 
                 return {
@@ -49,8 +54,6 @@ export const Results = () => {
                     episodeInfo: createEpisodeInfo(characterData.episode),
                 };
             });
-
-            setProfiles(profileList);
         }
     }, [
         characters,
@@ -62,25 +65,38 @@ export const Results = () => {
         locations,
     ]);
 
+    useEffect(() => {
+        const profiles = createProfiles();
+        if (profiles) {
+            setProfiles(profiles);
+        }
+    }, [JSON.stringify(characters), JSON.stringify(episodes), JSON.stringify(locations)]);
+
     if (isFetchingResources) {
         return (
-            <Flex justifyContent="center" alignItems="center" maxW="30%" maxH="30%">
-                <Spinner />
+            <Flex justifyContent="center" alignItems="center" p="12">
+                <Spinner width="30%" height="30%" />
             </Flex>
         );
     }
 
     return (
-        <Grid
-            as="section"
-            templateColumns={["repeat(1, 1fr)", "repeat(1, 1fr)", "repeat(2, 1fr)", "repeat(3, 1fr)"]}
-            gap="8"
-        >
-            {profiles.length > 0 ? (
-                profiles.map(profile => <ProfileCard key={profile.id} profile={profile} />)
-            ) : (
-                <Text>No profiles were found.</Text>
-            )}
-        </Grid>
+        <>
+            <Pagination paginationInfo={info} page={page} onPageChange={setPage} />
+            <Grid
+                as="section"
+                templateColumns={["repeat(1, 1fr)", "repeat(1, 1fr)", "repeat(2, 1fr)", "repeat(3, 1fr)"]}
+                gap="8"
+                py="6"
+                px="8"
+            >
+                {profiles.length > 0 ? (
+                    profiles.map(profile => <ProfileCard key={profile.id} profile={profile} />)
+                ) : (
+                    <Text>No profiles were found.</Text>
+                )}
+            </Grid>
+            <Pagination paginationInfo={info} page={page} onPageChange={setPage} pt="none" pb="4" />
+        </>
     );
 };

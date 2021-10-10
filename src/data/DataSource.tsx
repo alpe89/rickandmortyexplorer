@@ -1,4 +1,4 @@
-import { createContext, FC, ReactNode, useContext, useEffect, useMemo } from "react";
+import { createContext, FC, ReactNode, useContext, useMemo } from "react";
 import { useImmer } from "use-immer";
 import { CharacterMap, DataSource, EpisodeMap, LocationMap, Resource } from "../types";
 
@@ -21,10 +21,6 @@ const DataSourceProvider: FC<Props> = ({ children }) => {
             setEpisodes,
         };
     }, [characters, episodes, locations, setCharacters, setEpisodes, setLocations]);
-
-    useEffect(() => {
-        console.log("CHANGE IN DATA SOURCE", contextValue);
-    }, [contextValue]);
 
     return <DataContext.Provider value={contextValue}>{children}</DataContext.Provider>;
 };
