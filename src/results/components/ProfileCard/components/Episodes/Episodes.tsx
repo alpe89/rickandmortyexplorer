@@ -16,12 +16,12 @@ export const Episodes: FC<Props> = ({ episodes }) => {
                     boxShadow="md"
                     borderRadius="md"
                     bg="gray.800"
-                    key={`episode_${episode}`}
+                    key={`episode_${episode.episode}`}
                     justifyContent="center"
                     alignItems="center"
                 >
                     <Text fontSize="smaller" textAlign="center">
-                        {episode}
+                        {episode.episode}: {episode.name}
                     </Text>
                 </Flex>
             ))}

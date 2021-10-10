@@ -6,7 +6,7 @@ type Props = TabPanelProps & {
 };
 
 export const ProfilePanel: FC<Props> = ({ children, ...props }) => (
-    <TabPanel bg="brand.primary" py="4" px="4" borderRadius="sm" minH="180px" {...props}>
+    <TabPanel bg="brand.primary" py="4" px="4" borderBottomRadius="md" minH="180px" {...props}>
         {children}
     </TabPanel>
 );

@@ -8,8 +8,16 @@ type Props = { profile: Profile };
 
 export const ProfileCard: FC<Props> = ({ profile }) => {
     return (
-        <Card width="100%" padding="0" bg="brand.primary">
-            <Tabs isFitted variant="soft-rounded" width="100%" outlineColor="brand.primary" pt="6" bg="white">
+        <Card width="100%" padding="0" bg="brand.primary" borderRadius="md">
+            <Tabs
+                isFitted
+                variant="soft-rounded"
+                width="100%"
+                outlineColor="brand.primary"
+                pt="6"
+                bg="white"
+                borderRadius="md"
+            >
                 <TabList px="4">
                     <ProfileTab>Info</ProfileTab>
                     <ProfileTab>Origin</ProfileTab>

@@ -18,3 +18,5 @@ export type Character = {
     url: string;
     created: string;
 };
+
+export type CharacterMap = Record<string, Character>;

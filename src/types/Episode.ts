@@ -8,4 +8,4 @@ export type Episode = {
     created: string;
 };
 
-export type EpisodeMap = Record<string, Episode["name"]>;
+export type EpisodeMap = Record<string, Pick<Episode, "episode" | "name">>;

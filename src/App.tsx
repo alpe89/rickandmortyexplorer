@@ -1,5 +1,10 @@
 import { Layout } from "./layout";
+import { Results } from "./results";
 
 export const App = () => {
-    return <Layout />;
+    return (
+        <Layout>
+            <Results />
+        </Layout>
+    );
 };
