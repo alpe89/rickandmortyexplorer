@@ -12,19 +12,14 @@ export const Spinner: FC<Props> = ({ ...props }) => {
             animate={{ rotate: 360 }}
             transition={
                 {
-                    duration: 0.7,
+                    duration: 2.1,
                     repeat: "Infinity",
                     ease: "linear",
                 } as never
             }
             {...props}
         >
-            <img
-                src={spinner}
-                alt="Loading indicator"
-                width="100%"
-                height="auto"
-            />
+            <img src={spinner} alt="Loading indicator" width="100%" height="auto" />
         </AnimatedBox>
     );
 };

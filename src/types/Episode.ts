@@ -7,3 +7,5 @@ export type Episode = {
     url: string;
     created: string;
 };
+
+export type EpisodeMap = Record<string, Episode["name"]>;

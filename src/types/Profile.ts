@@ -1,7 +1,11 @@
-import { Character } from "./Character";
+import { Character, Location } from ".";
 
-export type CharacterInfo = Pick<Character, "name" | "status" | "species" | "type" | "gender">;
+export type CharacterInfo = Omit<Character, "id" | "origin" | "location" | "created" | "image" | "episode">;
+export type LocationInfo = Omit<Location, "id" | "created">;
 
 export type Profile = Pick<Character, "id" | "image"> & {
-    characterInformations: CharacterInfo;
+    characterInfo: CharacterInfo;
+    originInfo: LocationInfo;
+    locationInfo: LocationInfo;
+    episodeInfo: string[];
 };
