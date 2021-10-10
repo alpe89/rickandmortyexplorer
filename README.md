@@ -4,6 +4,14 @@ To install the project just clone the repo and run
 ```bash
 npm install or yarn install
 ```
+Then just run the application in dev mode with
+```bash
+npm start or yarn start
+```
+Otherwise build the project and serve it
+```bash
+npm run build && npx serve -S build or yarn build && npx serve -S build
+```
 
 ## Folder Structure
 
