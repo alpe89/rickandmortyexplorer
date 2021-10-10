@@ -1,46 +1,36 @@
-# Getting Started with Create React App
+# The Rick and Morty explorer
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+To install the project just clone the repo and run 
+```bash
+npm install or yarn install
+```
 
-## Available Scripts
+## Folder Structure
 
-In the project directory, you can run:
+The folder structure used in this project tries to follow a functional domain separation of concerns. Every folder is intended to build a feature with every component or functionality that is unique for that feature. As an example in the project there is the Results folder that contains a page (screen) and all the relative components that are used to display the fetched results on the page.
 
-### `yarn start`
+The base components that should be reused through the entire app are located in the root components folder, those components are built trying to let them be customized for the use case that they have to match. A good example in the project is the Card component that is just a wrapper around the Chakra-UI Card and is used as the base for the ProfileCard component in the Results domain.
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+## Design goals
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+The main point of the application is to display a list of cards that represents a character in the fictional universe of Rick and Morty. After a quick glance on the api's docs I've figured out that I would not be able to aggregate data with some kind of endpoint call. So I had to do that by hand on the frontend; at first I though of just downloading every episode and every location data in order to display it on the character's profile card, but I wasn't satisfied with that solution. Then I tried to narrow down at the minimum the amount of API requests for a single set of characters (20-ish) to 3 requests:
 
-### `yarn test`
+1. Characters request
+2. Locations request
+3. Episodes request
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+That was possible thanks to the filtering that the API supports, and with the help of react Hooks and Context I've a "main" data source in which are stored the characters, the locations and the episodes that I need for showing the current page in the app.
 
-### `yarn build`
+## Libraries
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+- [Chakra UI](https://chakra-ui.com/)
+- [use-immer](https://github.com/immerjs/use-immer)
+- [react-error-boundary](https://www.npmjs.com/package/react-error-boundary)
+- [rickandmorty api client](https://github.com/afuh/rick-and-morty-api-node)
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
-
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `yarn eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
-
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
-
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
+## Improvements
+- Add unit and integration tests
+- Improve the caching of episodes and locations, the goal should be to request only the episodes/locations that are not currently fetched and not fetch every location/episode needed for the set of characters every time that the page is changed
+- Add pagination to the episodes list, the UI is ugly
+- Add routing and routes to the single Character/Episode/Location
+- Add documentation and comments to components/hooks/functions

@@ -13,7 +13,6 @@ export const useLocations = () => {
                 setIsFetchingLocations(true);
                 try {
                     const response = await getLocation(locationIds);
-                    setIsFetchingLocations(false);
 
                     if (response.data) {
                         response.data.forEach(location => {
@@ -24,9 +23,10 @@ export const useLocations = () => {
                             });
                         });
                     }
-                } catch (e) {
                     setIsFetchingLocations(false);
-                    throw new Error(e as any);
+                } catch (e: any) {
+                    setIsFetchingLocations(false);
+                    throw new Error(e.message);
                 }
             }
         },

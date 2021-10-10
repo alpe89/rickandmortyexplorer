@@ -14,7 +14,6 @@ export const useEpisodes = () => {
                 setIsFetchingEpisodes(true);
                 try {
                     const response = await getEpisode(episodeIds);
-                    setIsFetchingEpisodes(false);
 
                     if (response.data) {
                         const episodesMap: EpisodeMap = {};
@@ -25,6 +24,7 @@ export const useEpisodes = () => {
                             }
                         });
 
+                        setIsFetchingEpisodes(false);
                         setEpisodes(episodesMap);
                     }
                 } catch (e) {
